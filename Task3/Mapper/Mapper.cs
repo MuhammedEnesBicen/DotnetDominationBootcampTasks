@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Task3.Models;
-using Task3.Models.DTOs;
 
 namespace Task3.Mapper
 {
