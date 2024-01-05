@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Task5.Models.DTOs;
 using Task5.Models.ORM;
 
@@ -74,5 +75,25 @@ namespace Task5.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, ReservationDTO reservationDTO)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            using(var context = new AppDbContext())
+            {
+                var reservation = context.Reservation.FirstOrDefault(x => x.Id == id);
+                if(reservation == null)
+                {
+                    return NotFound();
+                }
+                _mapper.Map(reservationDTO,reservation);
+                context.Entry(reservation).State = EntityState.Modified;
+                context.SaveChanges();
+                return NoContent();
+            }
+        }
     }
 }
